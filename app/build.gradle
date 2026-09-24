@@ -6,12 +6,25 @@ android {
     namespace "com.stuart.smartmirror"
     compileSdk 34
 
+    // This app is sideloaded onto a fixed Android 7.1.2 appliance, not shipped
+    // through Google Play. Keeping targetSdk 25 preserves the device's legacy
+    // fullscreen and system-navigation behavior.
+    lint {
+        disable "ExpiredTargetSdkVersion"
+    }
+
     defaultConfig {
         applicationId "com.stuart.smartmirror"
         minSdk 25
         targetSdk 25
-        versionCode 1
-        versionName "0.1.0"
+        versionCode 9
+        versionName "0.3.1"
+
+        ndk {
+            // RK3288 is a 32-bit ARM processor. Shipping only its native TLS
+            // library keeps the sideloaded APK small.
+            abiFilters "armeabi-v7a"
+        }
     }
 
     buildTypes {
@@ -25,4 +38,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+}
+
+dependencies {
+    implementation "org.conscrypt:conscrypt-android:2.7.0"
+    // Last OkHttp line maintained specifically for Android 5-9/Java 7-8.
+    implementation "com.squareup.okhttp3:okhttp:3.12.13"
 }

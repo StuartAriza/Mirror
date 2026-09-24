@@ -2,11 +2,18 @@
 <resources>
     <string name="app_name">Mirror</string>
     <string name="weather">Weather</string>
-    <string name="weather_placeholder">Weather is ready to connect</string>
-    <string name="weather_hint">Location and provider setup will come next.</string>
+    <string name="weather_needs_city">Set your city</string>
+    <string name="weather_tap_to_configure">Tap this panel to configure live weather.</string>
+    <string name="weather_loading">Loading weather…</string>
+    <string name="weather_waiting_for_update">Waiting for the first update.</string>
+    <string name="weather_unavailable">Weather unavailable</string>
+    <string name="weather_summary_format">%1$d%2$s  ·  %3$s</string>
+    <string name="weather_details_format">High %1$d%2$s  ·  Low %3$d%4$s  ·  Updated %5$s</string>
     <string name="hold_for_controls">Press and hold for recovery controls</string>
     <string name="open_recovery_controls">Press and hold for recovery controls</string>
+    <string name="recovery_ellipsis" translatable="false">•••</string>
     <string name="recovery_controls">Mirror controls</string>
+    <string name="open_mirror_settings">Mirror settings</string>
     <string name="open_android_settings">Open Android Settings</string>
     <string name="enable_navigation_strip">Set up Back / Home / Recents strip</string>
     <string name="exit_to_home">Exit to Home (Dashline)</string>
@@ -17,5 +24,15 @@
     <string name="back">Back</string>
     <string name="home">Home</string>
     <string name="recents">Recent apps</string>
+    <string name="settings_title">Mirror settings</string>
+    <string name="settings_weather_heading">Live weather</string>
+    <string name="settings_weather_explanation">Enter a city and region, such as “Edmonton, Alberta” or “Portland, Oregon”. The mirror uses Open-Meteo and does not request GPS access.</string>
+    <string name="city_hint">City and region</string>
+    <string name="use_fahrenheit">Use Fahrenheit</string>
+    <string name="save_settings">Save and return to Mirror</string>
+    <string name="cancel">Cancel</string>
+    <string name="city_required">Enter a city before saving.</string>
+    <string name="settings_saved">Settings saved. Weather will refresh now.</string>
+    <string name="startup_error_title">Mirror could not start</string>
+    <string name="startup_error_explanation">This recovery screen keeps you from being trapped. Photograph the red error text so the problem can be fixed.</string>
 </resources>
-

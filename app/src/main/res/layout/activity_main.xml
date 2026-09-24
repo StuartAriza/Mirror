@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
     android:keepScreenOn="true">
 
     <LinearLayout
@@ -45,6 +44,7 @@
             android:padding="28dp">
 
             <TextView
+                android:id="@+id/weather_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/weather"
@@ -54,18 +54,20 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/weather_summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:text="@string/weather_placeholder"
+                android:text="@string/weather_needs_city"
                 android:textColor="@android:color/white"
                 android:textSize="30sp" />
 
             <TextView
+                android:id="@+id/weather_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/weather_hint"
+                android:text="@string/weather_tap_to_configure"
                 android:textColor="@color/text_muted"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -79,9 +81,8 @@
         android:alpha="0.28"
         android:contentDescription="@string/open_recovery_controls"
         android:gravity="center"
-        android:text="•••"
+        android:text="@string/recovery_ellipsis"
         android:textColor="@android:color/white"
         android:textSize="24sp" />
 
 </FrameLayout>
-
