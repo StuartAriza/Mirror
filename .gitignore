@@ -3,6 +3,8 @@
 .gradle-user-home/
 .android-user-home/
 android-build-home/
+.android-build-*/
+.gradle-build-*/
 .idea/
 local.properties
 build/
@@ -10,3 +12,4 @@ build/
 captures/
 .externalNativeBuild/
 .cxx/
+Mirror-v*.apk

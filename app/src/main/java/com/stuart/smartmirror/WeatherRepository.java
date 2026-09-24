@@ -18,10 +18,8 @@ import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.security.Provider;
 import java.security.Security;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -46,6 +44,8 @@ final class WeatherRepository {
     private static final String KEY_LOCATION = "cached_location";
     private static final String KEY_TEMPERATURE = "cached_temperature";
     private static final String KEY_CONDITION = "cached_condition";
+    private static final String KEY_WEATHER_CODE = "cached_weather_code";
+    private static final String KEY_IS_DAY = "cached_is_day";
     private static final String KEY_HIGH = "cached_high";
     private static final String KEY_LOW = "cached_low";
     private static final String KEY_UNIT = "cached_unit";
@@ -61,6 +61,8 @@ final class WeatherRepository {
         final String location;
         final int temperature;
         final String condition;
+        final int weatherCode;
+        final boolean isDay;
         final int high;
         final int low;
         final String unit;
@@ -70,6 +72,8 @@ final class WeatherRepository {
                 String location,
                 int temperature,
                 String condition,
+                int weatherCode,
+                boolean isDay,
                 int high,
                 int low,
                 String unit,
@@ -77,6 +81,8 @@ final class WeatherRepository {
             this.location = location;
             this.temperature = temperature;
             this.condition = condition;
+            this.weatherCode = weatherCode;
+            this.isDay = isDay;
             this.high = high;
             this.low = low;
             this.unit = unit;
@@ -150,13 +156,17 @@ final class WeatherRepository {
         SharedPreferences prefs = preferences(context);
         long updatedAt = prefs.getLong(KEY_UPDATED_AT, 0L);
         String location = prefs.getString(KEY_LOCATION, "");
-        if (updatedAt == 0L || location.isEmpty()) {
+        if (updatedAt == 0L || location.isEmpty()
+                || !prefs.contains(KEY_WEATHER_CODE) || !prefs.contains(KEY_IS_DAY)) {
             return null;
         }
+        String condition = prefs.getString(KEY_CONDITION, "");
         return new WeatherData(
                 location,
                 prefs.getInt(KEY_TEMPERATURE, 0),
-                prefs.getString(KEY_CONDITION, ""),
+                condition,
+                prefs.getInt(KEY_WEATHER_CODE, 0),
+                prefs.getBoolean(KEY_IS_DAY, true),
                 prefs.getInt(KEY_HIGH, 0),
                 prefs.getInt(KEY_LOW, 0),
                 prefs.getString(KEY_UNIT, "°C"),
@@ -197,10 +207,6 @@ final class WeatherRepository {
         });
     }
 
-    static String formatUpdatedTime(long timestamp) {
-        return DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date(timestamp));
-    }
-
     private static LocationResult geocode(String city) throws IOException, JSONException,
             LocationNotFoundException {
         String endpoint = "https://geocoding-api.open-meteo.com/v1/search?name="
@@ -228,7 +234,7 @@ final class WeatherRepository {
         String endpoint = String.format(
                 Locale.US,
                 "https://api.open-meteo.com/v1/forecast?latitude=%.5f&longitude=%.5f"
-                        + "&current=temperature_2m,weather_code"
+                        + "&current=temperature_2m,weather_code,is_day"
                         + "&daily=temperature_2m_max,temperature_2m_min"
                         + "&temperature_unit=%s&timezone=auto&forecast_days=1",
                 location.latitude,
@@ -239,6 +245,7 @@ final class WeatherRepository {
         JSONObject current = root.getJSONObject("current");
         JSONObject daily = root.getJSONObject("daily");
         int code = current.getInt("weather_code");
+        boolean isDay = current.getInt("is_day") == 1;
         int temperature = (int) Math.round(current.getDouble("temperature_2m"));
         int high = (int) Math.round(daily.getJSONArray("temperature_2m_max").getDouble(0));
         int low = (int) Math.round(daily.getJSONArray("temperature_2m_min").getDouble(0));
@@ -247,6 +254,8 @@ final class WeatherRepository {
                 location.displayName,
                 temperature,
                 describeWeather(code),
+                code,
+                isDay,
                 high,
                 low,
                 fahrenheit ? "°F" : "°C",
@@ -331,6 +340,8 @@ final class WeatherRepository {
                 .putString(KEY_LOCATION, data.location)
                 .putInt(KEY_TEMPERATURE, data.temperature)
                 .putString(KEY_CONDITION, data.condition)
+                .putInt(KEY_WEATHER_CODE, data.weatherCode)
+                .putBoolean(KEY_IS_DAY, data.isDay)
                 .putInt(KEY_HIGH, data.high)
                 .putInt(KEY_LOW, data.low)
                 .putString(KEY_UNIT, data.unit)

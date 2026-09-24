@@ -17,8 +17,10 @@ android {
         applicationId "com.stuart.smartmirror"
         minSdk 25
         targetSdk 25
-        versionCode 9
-        versionName "0.3.1"
+        // Keep the internal code above local test builds so this release can
+        // update mirrors that installed them, while public tags continue from 0.3.1.
+        versionCode 19
+        versionName "0.3.2"
 
         ndk {
             // RK3288 is a 32-bit ARM processor. Shipping only its native TLS
